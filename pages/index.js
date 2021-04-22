@@ -244,14 +244,6 @@ export default function Home() {
         }}
       >
         <div className="rounded flex flex-col items-center p-6 bg-black text-white phone:p-0">
-          {/* <span
-            className="absolute right-4 top-1 text-3xl cursor-pointer"
-            onClick={() => {
-              setShowModal(false);
-            }}
-          >
-            &times;
-          </span> */}
           <img
             src={selectedAlumini?.image}
             className="w-32 h-32 rounded-full mb-5"
@@ -302,14 +294,6 @@ export default function Home() {
           id="alumini_form"
           className="rounded flex flex-col items-center p-6 bg-black text-white phone:p-0"
         >
-          {/* <span
-            className="absolute right-4 top-1 text-3xl cursor-pointer"
-            onClick={() => {
-              setShowNewModal(false);
-            }}
-          >
-            &times;
-          </span> */}
           <AluminiForm
             cb={createAlumini}
             loading={creatingAlumini}
@@ -334,15 +318,6 @@ export default function Home() {
           id="alumini_form"
           className="rounded flex flex-col items-center p-6 bg-black text-white phone:p-0"
         >
-          {/* <span
-            className="absolute right-4 top-1 text-3xl cursor-pointer"
-            onClick={() => {
-              setShowEditModal(false);
-              setStage(1);
-            }}
-          >
-            &times;
-          </span> */}
           {stage === 1 ? (
             <div>
               <input
@@ -416,15 +391,6 @@ export default function Home() {
           id="alumini_form"
           className="rounded flex flex-col items-center p-6 bg-black text-white phone:p-0"
         >
-          {/* <span
-            className="absolute right-4 top-1 text-3xl cursor-pointer"
-            onClick={() => {
-              setShowSearchModal(false);
-              setFoundSearch({});
-            }}
-          >
-            &times;
-          </span> */}
           <div>
             <input
               className="p-2  bg-black border border-yellow-400 text-yellow-400 w-full mb-2"
@@ -441,6 +407,7 @@ export default function Home() {
                 setSearchingAlumini(true);
                 try {
                   if (!search) return setSearchError(true);
+                  setFoundSearch({});
                   let { data } = await axios.get(
                     `/api/search?matricNumber=${search}`
                   );
@@ -471,14 +438,6 @@ export default function Home() {
             <Spinner className="mt-5" />
           ) : foundSearch.firstname ? (
             <div className="rounded flex flex-col items-center p-6 bg-black text-white phone:p-0">
-              <span
-                className="absolute right-4 top-1 text-3xl cursor-pointer"
-                onClick={() => {
-                  setShowModal(false);
-                }}
-              >
-                &times;
-              </span>
               <img
                 src={foundSearch?.image}
                 className="w-32 h-32 rounded-full mb-5"
