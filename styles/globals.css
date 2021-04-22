@@ -33,3 +33,15 @@ a {
 * {
   box-sizing: border-box;
 }
+
+button,
+input,
+select {
+  outline: none;
+}
+
+button,
+input,
+select:focus {
+  outline: none;
+}
