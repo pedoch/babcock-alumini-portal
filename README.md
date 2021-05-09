@@ -1,4 +1,4 @@
-##Welcome to the Babcock Alumini Portal
+## Welcome to the Babcock Alumini Portal
 
 To run the app you need to create a `.env` file in the root of the dierctory and add the following environment variables.
 
