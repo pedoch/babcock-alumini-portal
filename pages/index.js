@@ -34,7 +34,6 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [searchError, setSearchError] = useState(false);
   const [foundSearch, setFoundSearch] = useState({});
-  const [downloadingReport, setDownloadingReport] = useState(false);
 
   let todayDate = new Date();
   useEffect(() => {
@@ -76,59 +75,6 @@ export default function Home() {
       }
     } finally {
       setAluminiLoading(false);
-    }
-  }
-
-  async function getReport(year, matric) {
-    setDownloadingReport(true);
-
-    try {
-      if (!year && !matric)
-        toaster.danger("Unable to generate report", {
-          description: "No year or matric number defined.",
-        });
-      let { data } = await axios.get(
-        `/api/report?${year ? "year" : matric && "matricNumber"}=${
-          year || matric
-        }`
-      );
-
-      const FileDownload = require("js-file-download");
-      FileDownload(new Blob([data]), `${year || matric} Report.pdf`);
-
-      // var blob = new Blob([data], { type: "application/pdf" });
-
-      // // IE doesn't allow using a blob object directly as link href
-      // // instead it is necessary to use msSaveOrOpenBlob
-      // if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      //   window.navigator.msSaveOrOpenBlob(blob);
-      //   return;
-      // }
-
-      // // For other browsers:
-      // // Create a link pointing to the ObjectURL containing the blob.
-      // const url = window.URL.createObjectURL(blob);
-      // var link = document.createElement("a");
-      // link.href = url;
-      // link.download = `${year || matric} Report.pdf`;
-      // link.click();
-      // setTimeout(function () {
-      //   // For Firefox it is necessary to delay revoking the ObjectURL
-      //   window.URL.revokeObjectURL(url);
-      // }, 100);
-    } catch (error) {
-      console.log(error);
-      if (!error.response) {
-        toaster.danger("Unable to generate report", {
-          description: "May be a network error",
-        });
-      } else if (error.response.status === 500) {
-        toaster.danger("Unable to generate report", {
-          description: "May be a problem from our side. We'll investigate",
-        });
-      }
-    } finally {
-      setDownloadingReport(false);
     }
   }
 
@@ -181,7 +127,7 @@ export default function Home() {
   }
   return (
     <div
-      className="w-full h-screen bg-cover bg-no-repeat bg-center bg-fixed"
+      className="w-full h-screen bg-cover bg-no-repeat bg-center bg-fixed phone:bg-repeat-y"
       style={{ backgroundImage: "url('/images/graduation1.png')" }}
     >
       <Head>
@@ -271,13 +217,14 @@ export default function Home() {
               <option>No Dates Available</option>
             )}
           </select>
-          <button
+          <a
             className="p-2 mr-3 bg-black border border-yellow-400 text-yellow-400"
-            onClick={() => getReport(selectedYear)}
-            disabled={downloadingReport}
+            href={`/api/report?year=${selectedYear}`}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            {downloadingReport ? "Downloading..." : "Get Report"}
-          </button>
+            Get Report
+          </a>
         </div>
         {aluminiLoading ? (
           <Spinner className="m-5 rounded-full bg-yellow-400" />
@@ -341,13 +288,14 @@ export default function Home() {
               {selectedAlumini?.bestLecturer}
             </p>
           </div>
-          <button
+          <a
             className="p-2 mt-5 bg-black border border-yellow-400 text-yellow-400"
-            onClick={() => getReport(null, selectedAlumini?.matricNumber)}
-            disabled={downloadingReport}
+            href={`/api/report?matricNumber=${selectedAlumini?.matricNumber}`}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            {downloadingReport ? "Downloading..." : "Get Report"}
-          </button>
+            Get Report
+          </a>
         </div>
       </Dialog>
       <Dialog
@@ -542,13 +490,14 @@ export default function Home() {
                   {foundSearch?.bestLecturer}
                 </p>
               </div>
-              <button
+              <a
                 className="p-2 mt-5 bg-black border border-yellow-400 text-yellow-400"
-                onClick={() => getReport(null, foundSearch?.matricNumber)}
-                disabled={downloadingReport}
+                href={`/api/report?matricNumber=${foundSearch?.matricNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {downloadingReport ? "Downloading..." : "Get Report"}
-              </button>
+                Get Report
+              </a>
             </div>
           ) : (
             <p className="text-yellow-400 text-xl mt-10">Nothing here...</p>
