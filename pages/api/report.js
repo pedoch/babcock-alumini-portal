@@ -114,7 +114,7 @@ export default async (req, res) => {
 
           report.on("end", () => {
             res.setHeader("Content-Type", "application/pdf");
-            return res.send(Buffer.concat(chunks)); // Buffer data
+            return res.status(200).send(Buffer.concat(chunks)); // Buffer data
           });
 
           report.end();
@@ -193,7 +193,7 @@ export default async (req, res) => {
 
           report.on("end", () => {
             res.setHeader("Content-Type", "application/pdf");
-            return res.send(Buffer.concat(chunks)); // Buffer data
+            return res.status(200).send(Buffer.concat(chunks)); // Buffer data
           });
 
           report.end();
