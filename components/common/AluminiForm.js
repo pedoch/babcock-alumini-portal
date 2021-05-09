@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toaster } from "evergreen-ui";
 
 function AluminiForm({ alumini, cb, loading, setLoading }) {
   const [firstname, setFirstname] = useState("");
@@ -51,11 +52,13 @@ function AluminiForm({ alumini, cb, loading, setLoading }) {
   }, []);
 
   async function submitForm() {
-    try {
-      setLoading(true);
-      const CLOUDINARY_UPLOAD_PRESET = "ayuedatm";
+    setLoading(true);
 
-      let data;
+    let data;
+
+    try {
+      const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
+      const CLOUD_NAME = process.env.CLOUD_NAME;
 
       if (imageBlob) {
         let form = new FormData();
@@ -64,7 +67,7 @@ function AluminiForm({ alumini, cb, loading, setLoading }) {
         form.append("folder", "/babcock-alumini/");
 
         let res = await axios({
-          url: "https://api.cloudinary.com/v1_1/dsbogvjcc/upload/",
+          url: `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload/`,
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -74,7 +77,13 @@ function AluminiForm({ alumini, cb, loading, setLoading }) {
 
         data = res.data;
       }
+    } catch (err) {
+      toaster.warning("Image upload not working at the moment.", {
+        description: "Your request will still be processed regardless",
+      });
+    }
 
+    try {
       cb({
         firstname,
         lastname,
@@ -87,11 +96,7 @@ function AluminiForm({ alumini, cb, loading, setLoading }) {
         cgpa: parseFloat(cgpa),
         interest: interests,
         bestLecturer,
-        image: data
-          ? data.secure_url
-          : image
-          ? image
-          : "https://res.cloudinary.com/dsbogvjcc/image/upload/v1619052171/babcock-alumini/user-profile_mphtde.jpg",
+        image: data ? data.secure_url : "/images/user-profile.jpg",
       });
     } catch (error) {
       if (!error.response) {
@@ -109,10 +114,7 @@ function AluminiForm({ alumini, cb, loading, setLoading }) {
   return (
     <>
       <img
-        src={
-          image ||
-          "https://res.cloudinary.com/dsbogvjcc/image/upload/v1619052171/babcock-alumini/user-profile_mphtde.jpg"
-        }
+        src={image || "/images/user-profile.jpg"}
         className="w-32 h-32 rounded-full mb-5"
       />
       <input
@@ -124,9 +126,7 @@ function AluminiForm({ alumini, cb, loading, setLoading }) {
             let url = URL.createObjectURL(e.target.files[0]);
             setImage(url);
           } else {
-            setImage(
-              "https://res.cloudinary.com/dsbogvjcc/image/upload/v1619052171/babcock-alumini/user-profile_mphtde.jpg"
-            );
+            setImage("/images/user-profile.jpg");
           }
         }}
       />

@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
 let uri = process.env.MONGODB_URI;
-// let uri =
-//   "mongodb+srv://deltanboi:cf7P8lO8rF0lQM8h@cluster0.bjxhf.mongodb.net/babcock-alumini?retryWrites=true&w=majority";
 
 const connection = {};
 
