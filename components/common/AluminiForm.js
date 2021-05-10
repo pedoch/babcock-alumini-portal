@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toaster } from "evergreen-ui";
+import { CLOUD_NAME } from "../../util/cloud";
 
 function AluminiForm({ alumini, cb, loading, setLoading }) {
   const [firstname, setFirstname] = useState("");
@@ -57,8 +58,10 @@ function AluminiForm({ alumini, cb, loading, setLoading }) {
     let data;
 
     try {
-      const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
-      const CLOUD_NAME = process.env.CLOUD_NAME;
+      const CLOUD_NAME = "dsbogvjcc";
+
+      const CLOUDINARY_UPLOAD_PRESET =
+        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
       if (imageBlob) {
         let form = new FormData();
